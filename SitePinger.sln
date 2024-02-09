@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34525.116
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SitePinger.ConsoleApp", "SitePinger.ConsoleApp\SitePinger.ConsoleApp.csproj", "{C917E5B8-5571-456B-AFBB-3884E2832D2A}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "SitePinger.Ping", "SitePinger.Ping\SitePinger.Ping.fsproj", "{D335946F-2399-4B3C-A3AC-AD8A509E70C5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C917E5B8-5571-456B-AFBB-3884E2832D2A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C917E5B8-5571-456B-AFBB-3884E2832D2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C917E5B8-5571-456B-AFBB-3884E2832D2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C917E5B8-5571-456B-AFBB-3884E2832D2A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D335946F-2399-4B3C-A3AC-AD8A509E70C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D335946F-2399-4B3C-A3AC-AD8A509E70C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D335946F-2399-4B3C-A3AC-AD8A509E70C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D335946F-2399-4B3C-A3AC-AD8A509E70C5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {70A49F24-1819-4371-BDA6-CBCE2F4B06D7}
+	EndGlobalSection
+EndGlobal
