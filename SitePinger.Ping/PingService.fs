@@ -8,12 +8,15 @@ open System.Threading.Tasks
 
 
 // Define an asynchronous F# function to measure request time
-let measureRequestTime (address: string) (port: int) =
+let measureRequestTime (address: string) (port: int) (timeout: int) =
     async {
-        printf "start pinging..."
+        
+        printf "%s:%d..." address port
         
         // Initialize the HttpClient
         use client = new HttpClient()
+        client.Timeout <- TimeSpan.FromSeconds(timeout)
+
 
         // Construct the full URL using the provided address and port
         let url = sprintf "http://%s:%d" address port
@@ -28,35 +31,36 @@ let measureRequestTime (address: string) (port: int) =
             // Stop the stopwatch after receiving the response
             stopwatch.Stop()
 
+            
+
             // Check if the request was successful
             if response.IsSuccessStatusCode then
                 // Return the elapsed time in milliseconds
-                return Some stopwatch.ElapsedMilliseconds
+                printf "%dms\n" stopwatch.ElapsedMilliseconds
             else
                 // Return None if the request was unsuccessful
-                return None
+                printf "NOPE\n"
+
+            return None
         with
         | :? HttpRequestException as ex ->
-            printfn "HttpRequestException: %s" ex.Message
+            printfn "%s" ex.Message
             return None
         | ex ->
-            printfn "Exception: %s" ex.Message
+            printfn "%s" ex.Message
             return None
     }
 
-// Example usage
-let address = "example.com"
-let port = 80
 
-async {
-    let! timeTaken = measureRequestTime address port
-    match timeTaken with
-    | Some time -> printfn "Time taken: %d ms" time
-    | None -> printfn "Failed to get response."
-} |> Async.RunSynchronously
+let measureRequestTimeTask (address: string) (port: int) (timeout: int) : Task<Nullable<int64>> =
+    async {
+        let! result = measureRequestTime address port timeout
+        match result with
+        | Some time -> return Nullable(time)
+        | None -> return Nullable()
+    } |> Async.StartAsTask
 
-
-
-let measureRequestTimeTask (address: string) (port: int) : Task<Option<int64>> =
-    measureRequestTime address port
-    |> Async.StartAsTask
+type PingService() =
+    interface IPingService with
+        member this.MeasureRequestTimeAsync(address, port, timeout) =
+            measureRequestTimeTask address port timeout

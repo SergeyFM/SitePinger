@@ -1,5 +1,4 @@
-﻿using System.Net;
-using System.Reflection;
+﻿using System.Reflection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -10,9 +9,8 @@ namespace SitePinger.ConsoleApp;
 internal class Program {
     static void Main(string[] args) {
 
-
         // Read configuration from config.json file
-        var configuration = new ConfigurationBuilder()
+        IConfigurationRoot configuration = new ConfigurationBuilder()
             .SetBasePath(Path.GetDirectoryName(Assembly.GetExecutingAssembly()?.Location) ?? "")
             .AddJsonFile("config.json")
             .Build();
@@ -27,24 +25,34 @@ internal class Program {
         services.AddOptions<PingSettings>()
             .Bind(configuration.GetSection("PingSettings"))
             .ValidateOnStart();
-        
+
+        // Add services
+        services.AddSingleton<IPingService, PingService.PingService>();
 
         IServiceProvider serviceProvider = services.BuildServiceProvider();
 
-        var pingSettings = serviceProvider.GetRequiredService<IOptions<PingSettings>>().Value;
+        // Do stuff
+        RunLoop(serviceProvider);
 
+    }
+
+    static async void RunLoop(
+            IServiceProvider serviceProvider
+        ) {
+
+        PingSettings pingSettings = serviceProvider.GetRequiredService<IOptions<PingSettings>>().Value;
         Console.WriteLine(pingSettings);
 
         string address = pingSettings.WebServer;
         int port = pingSettings.Port;
+        int sleep = pingSettings.IntervalSec;
+        int timeout = pingSettings.TimeoutSec;
 
-        // Assuming measureRequestTimeTask is a static method in a module or a static class
-        var timeTakenOption = PingService.measureRequestTimeTask(address, port);
-        timeTakenOption.Wait();
-
-        
-        Console.WriteLine(timeTakenOption.Result);
-
-
+        IPingService pingService = serviceProvider.GetRequiredService<IPingService>();
+        while (true) {
+            Task<long?> reqTask = pingService.MeasureRequestTimeAsync(address, port, timeout);
+            reqTask.Wait();
+            Thread.Sleep(sleep*1000 + new Random().Next(1,6)*100);
+        }
     }
 }

@@ -1,8 +1,8 @@
 ﻿{
   "PingSettings": {
-    "WebServer": "linkedin.com",
+    "WebServer": "176.34.159.127",
     "Port": 80,
-    "IntervalSec": 5,
-    "TimeoutSec": 2
+    "IntervalSec": 2,
+    "TimeoutSec": 10
   }
 }
