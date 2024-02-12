@@ -1,5 +1,4 @@
-﻿using System.Reflection;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using SitePinger.Ping;
@@ -11,7 +10,7 @@ internal class Program {
 
         // Read configuration from config.json file
         IConfigurationRoot configuration = new ConfigurationBuilder()
-            .SetBasePath(Path.GetDirectoryName(Assembly.GetExecutingAssembly()?.Location) ?? "")
+            //.SetBasePath(Path.GetDirectoryName(Assembly.GetExecutingAssembly()?.Location) ?? "")
             .AddJsonFile("config.json")
             .Build();
 
@@ -52,7 +51,7 @@ internal class Program {
         while (true) {
             Task<long?> reqTask = pingService.MeasureRequestTimeAsync(address, port, timeout);
             reqTask.Wait();
-            Thread.Sleep(sleep*1000 + new Random().Next(1,6)*100);
+            Thread.Sleep(sleep * 1000 + new Random().Next(1, 6) * 100);
         }
     }
 }
